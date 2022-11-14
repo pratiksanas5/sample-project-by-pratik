@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeappdeployment
+  namespace: production
+spec: 
+  selector:
+    matchLabels:
+      app: nodeapp
+#  replicas: 2
+  template:
+    metadata: 
+#      name: nodeapppod
+        labels:
+          app: nodeapp #pod
+    spec:
+      containers:
+      - name: nodeappcontainer
+        image: pratiksanas5/hello-node:latest
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeappsvc
+  namespace: production
+  labels:
+    app: nodeapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: nodeapp
+  ports:
+  - port: 3001
+    targetPort: 3000
